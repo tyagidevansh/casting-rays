@@ -1,7 +1,7 @@
 class Ray {
-    constructor(x, y) {
-        this.pos = createVector(x,y);
-        this.dir = createVector(1,0);
+    constructor(pos, angle) {
+        this.pos = pos;
+        this.dir = p5.Vector.fromAngle(angle);
     }
 
     lookAt(x, y) {
@@ -15,6 +15,7 @@ class Ray {
         push();
         translate(this.pos.x, this.pos.y);
         line(0, 0, this.dir.x * 10, this.dir.y * 10);
+        pop();
     }
 
     cast(wall) {
@@ -40,7 +41,6 @@ class Ray {
             const pt = createVector();
             pt.x = x1 + t * (x2 - x1);
             pt.y = y1 + t * (y2 - y1);
-            console.log(true);
             return pt;
         } else {
             return;

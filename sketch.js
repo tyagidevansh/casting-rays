@@ -2,8 +2,11 @@ let walls = [];
 let ray;
 let particle;
 
+const sceneW = 400;
+const sceneH = 400;
+
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(800, 400);
     for (let i = 0; i < 5; i += 1) {
         let x1 = random(width);
         let x2 = random(width);
@@ -25,5 +28,17 @@ function draw() {
     }
     particle.show();
     particle.update(mouseX, mouseY);
-    particle.look(walls);
+
+    const scene = particle.look(walls);
+    console.log(scene);
+    const w = sceneW / scene.length; 
+    push();
+    translate(sceneW, 0);
+    for (let i = 0; i < scene.length; i++) {
+        noStroke();
+        const b = map(scene[i], 0, sceneW, 255, 0);
+        fill(b);
+        rect(i * w, 0, w, height);
+    }
+    pop();
 }

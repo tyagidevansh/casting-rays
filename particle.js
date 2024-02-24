@@ -1,8 +1,9 @@
 class Particle{
     constructor() {
         this.pos = createVector(width / 2, height / 2);
+        this.heading = 0;
         this.rays = [];
-        for (let a = 0; a < 90; a+= 1) {
+        for (let a = -30; a < 30; a+= 1) {
             this.rays.push(new Ray(this.pos, radians(a)));
         }
     }
@@ -13,6 +14,19 @@ class Particle{
         for (let ray of this.rays){
             ray.show();
         }
+    }
+
+    rotate(angle) {
+        this.heading += angle;
+        for (let i = 0; i < this.rays.length; i += 1) {
+            this.rays[i].setAngle(radians(i) + this.heading);
+        }
+    }
+
+    move(amount) {
+        const vel = p5.Vector.fromAngle(this.heading);
+        vel.setMag(amount);
+        this.pos.add(vel);
     }
 
     update(x,y) {
@@ -28,7 +42,9 @@ class Particle{
             for (let wall of walls) {
                 const pt = ray.cast(wall);
                 if (pt) {
-                    const d = p5.Vector.dist(this.pos, pt);
+                    let d = p5.Vector.dist(this.pos, pt)
+                    let a = ray.dir.heading() - this.heading;
+                    d *= cos(a);
                     if (d < record) {
                         record = d;
                         closest = pt;
